@@ -1,0 +1,14 @@
+groups:
+  - name: Network Download
+    interval: 15s
+  - name: alerting_rules
+    rules:
+      - alert: UnusualNetworkThroughputOut
+        expr: sum by (instance) (irate(node_network_transmit_bytes_total[2m])) / 1024 / 1024 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Unusual network throughput out (instance {{ $labels.instance }})"
+          description: "Host network interfaces are probably sending too much data (> 100 MB/s)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+

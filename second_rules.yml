@@ -1,0 +1,13 @@
+groups:
+  - name: disk_usage
+    interval: 15s
+  - name: alerting_rules
+    rules:
+      - alert: DiskSpace10%Free
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} * 100) / node_filesystem_size_bytes{mountpoint="/"} < 20
+        labels:
+          severity: moderate
+        annotations:
+          summary: "Instance {{ $labels.instance }} is low on disk space"
+          description: "{{ $labels.instance }} has only {{ $value }}% free."
+

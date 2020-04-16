@@ -1,0 +1,14 @@
+groups:
+  - name: Memory usage
+    interval: 15s
+  - name: alerting_rules
+    rules:
+      - alert: Memory10%Free
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+        for: 5m
+        labels:
+          severity: moderate
+        annotations:
+          summary: "Out of memory (instance {{ $labels.instance }})"
+          description: "Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+

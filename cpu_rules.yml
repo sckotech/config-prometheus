@@ -1,0 +1,14 @@
+groups:
+  - name: CPU usage
+    interval: 15s
+  - name: alerting_rules
+    rules:
+      - alert: CPU10%Free
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU load (instance {{ $labels.instance }})"
+          description: "CPU load is > 80%\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+
